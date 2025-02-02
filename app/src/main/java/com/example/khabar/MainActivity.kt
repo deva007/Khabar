@@ -1,13 +1,14 @@
 package com.example.khabar
 
+import android.content.Context
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Scaffold
+import androidx.compose.material3.DrawerState
+import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.Text
+import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
@@ -21,15 +22,17 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            MyApp()
+            MyApp(context = this)
         }
     }
 }
 
 @Composable
-fun MyApp() {
+fun MyApp(context: Context) {
     val navController = rememberNavController()
-    NavGraph(navController = navController)
+   val  drawerState: DrawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
+
+    NavGraph(navController = navController, drawerState = drawerState, context)
 }
 
 @Composable
