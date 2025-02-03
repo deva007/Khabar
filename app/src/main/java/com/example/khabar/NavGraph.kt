@@ -1,30 +1,20 @@
 package com.example.khabar
 
-import DataStorageManager
-import LoginScreen
-import SalesReportScreen
-import android.content.Context
 import android.util.Log
-import androidx.compose.material3.DrawerState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-
+import androidx.navigation.compose.rememberNavController
 val TAG = "NavGraph"
-
 @Composable
-fun NavGraph(navController: NavHostController, drawerState: DrawerState, context: Context) {
-    val isLoggedIn by DataStorageManager.getLoggedIn(context).collectAsState(initial = false)
-
+fun NavGraph(navController: NavHostController) {
     NavHost(
         navController = navController,
-        startDestination = if (isLoggedIn) "home_screen" else "splash_screen"
+        startDestination = "splash_screen"
     ) {
         composable("splash_screen") {
-            SplashScreen(navController)
+            SplashScreen(navigateToLogin = { navController.navigate("country_screen") })
         }
 
         composable("country_screen") {
@@ -41,38 +31,14 @@ fun NavGraph(navController: NavHostController, drawerState: DrawerState, context
             LoginScreen(navController)
         }
         composable("home_screen") {
-            HomeScreen(navController, drawerState)
+           // HomeScreen()
         }
-
-        composable("onboarding") {
-            OnboardingScreen(navController)
+        composable("transactions_screen") {
+           // TransactionsScreen()
         }
-
-        // sales screens
-
-        composable("sales_report") {
-            SalesReportScreen(navController)
+        composable("purchases_screen") {
+           // PurchasesScreen()
         }
-        composable("sales_details") {
-            SalesDetailScreen(navController)
-        }
-
-
-        composable("transaction_history") {
-            TransactionHistoryScreen(navController)
-        }
-
-        composable("transaction_detail") {
-            TransactionHistoryDetailScreen(navController)
-        }
-        
-
-        composable("deposit_history") {
-            DepositHistoryScreen(navController)
-        }
-
-        composable("deposit_detail") {
-            DepositDetailScreen(navController)
-        }
+        // Add more screens as needed
     }
 }

@@ -3,7 +3,6 @@ package com.example.khabar
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.KeyboardArrowUp
@@ -14,10 +13,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.ColorFilter
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.unit.sp
-import com.example.khabar.ui.theme.YellowMellow
 
 @Composable
 fun CountrySelectionScreen(
@@ -25,23 +20,20 @@ fun CountrySelectionScreen(
     onLanguageSelected: (String) -> Unit,
     navigateToLogin: () -> Unit
 ) {
-    var selectedCountry by remember { mutableStateOf("🇺🇸 USA") }
-    var selectedLanguage by remember { mutableStateOf("English (US)") }
-    var mapId by remember { mutableStateOf(R.drawable.ic_map_usa) }
+    var selectedCountry by remember { mutableStateOf("") }
+    var selectedLanguage by remember { mutableStateOf("") }
 
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(YellowMellow)
+            .background(Color.Yellow)
             .padding(16.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.SpaceEvenly
     ) {
         Image(
-            modifier = Modifier.size(300.dp),
-            painter = painterResource(mapId),
-            contentDescription = "map_image",
-            colorFilter = ColorFilter.tint(color = Color.DarkGray)
+            painter = painterResource(R.drawable.ic_logo),
+            contentDescription = "map_image"
         )
 
         Column(
@@ -52,17 +44,7 @@ fun CountrySelectionScreen(
                 label = "Select Country",
                 options = countries.map { it.flag + " " + it.name },
                 selectedOption = selectedCountry,
-                onOptionSelected = {
-                    mapId = when  {
-                        it.contains("Nigeria") -> R.drawable.ic_map_nigeria
-                        it.contains("Sudan") -> R.drawable.ic_map_sudan
-                        it.contains("South Africa") -> R.drawable.ic_map_south_africa
-                        it.contains("India") -> R.drawable.ic_map_india
-                        else -> R.drawable.ic_map_usa
-                    }
-                    selectedCountry = it;
-                    onCountrySelected(it)
-                }
+                onOptionSelected = { selectedCountry = it; onCountrySelected(it) }
             )
 
             DropdownSelector(
@@ -72,16 +54,14 @@ fun CountrySelectionScreen(
                 onOptionSelected = { selectedLanguage = it; onLanguageSelected(it) }
             )
         }
-        Button(
-            onClick = {
-                navigateToLogin()
-            },
-            modifier = Modifier.fillMaxWidth(),
-            colors = ButtonDefaults.buttonColors(containerColor = Color.Black)
-        ) {
-            Text("Proceed", fontSize = 16.sp, fontWeight = FontWeight.Bold, color = Color.White)
-        }
 
+        Button(
+            onClick = navigateToLogin,
+            colors = ButtonDefaults.buttonColors(Color.Black),
+            modifier = Modifier.padding(top = 16.dp)
+        ) {
+            Text("Proceed", color = Color.White)
+        }
     }
 }
 
@@ -113,7 +93,6 @@ fun DropdownSelector(
             },
             modifier = Modifier
                 .fillMaxWidth()
-                .background(shape = RoundedCornerShape(size = 48.dp), color = YellowMellow)
                 .menuAnchor()
         )
 
